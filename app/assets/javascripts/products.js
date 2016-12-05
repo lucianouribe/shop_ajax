@@ -11,7 +11,10 @@ $(document).ready(function() {
   var $getProduct = $('#get-product')
   var $productForm = $('#add-product-form');
   var back = $('.back');
-  var newProduct = $('.new-product')
+  var newProduct = $('.new-product');
+  var buy = $('.buy');
+  var $buyProduct = $('buy-product');
+
 
   var BASEURL = 'http://devpoint-ajax-example-server.herokuapp.com/api/v1';
 
@@ -25,7 +28,13 @@ $(document).ready(function() {
   back.click(function(){
     $productList.show();
     $showProduct.hide();
-    $productShow.empty();
+    $productForm.hide();
+    $showProduct.empty();
+  })
+
+  // BACK button
+  buy.click(function(){
+    $buyProduct.show();
   })
 
   // EXISTING PRODUCT CARDS
@@ -39,20 +48,25 @@ $(document).ready(function() {
     }).success(function(data) {
       for(var i = 0; i < data.length; i++ ) {
         var product = data[i];
-        $products.append("<div>" +
-          "<div id='" + product.id + "'class='col s12 m4'>" +
-            "<div class='card'>" +
-              "<div class='card-content'>" +
-                "<span class='card-title'>" + product.name + "</span>" +
-                "<p>" + "Description: " + product.description + "</p>" +
-                "<p>" + "Price: " + "$" + product.base_price + "</p>" +
-                "<button class='op-btn btn show-product'>" + "<i class='material-icons'>" + "visibility" + "</i>" + "</button>" +
-                "<button class='op-btn btn edit-product'>" + "<i class='material-icons'>" + "edit" + "</i>" + "</button>" +
-                "<button class='op-btn btn delete-product'>" + "<i class='material-icons'>" + "delete" + "</i>" + "</button>" +
+        if(product.base_price !== null && product.base_price !== 0 ) {
+          if(product.quantity_on_hand !== null && product.quantity_on_hand !== 0) {
+            theProduct = product
+            $products.append("<div>" +
+              "<div id='" + theProduct.id + "'class='col s12 m4'>" +
+                "<div class='card'>" +
+                  "<div class='card-content'>" +
+                    "<span class='card-title'>" + theProduct.name + "</span>" +
+                    "<p>" + "Description: " + theProduct.description + "</p>" +
+                    "<p>" + "Price: " + "$" + theProduct.base_price + "</p>" +
+                    "<button class='op-btn btn show-product'>" + "<i class='material-icons'>" + "visibility" + "</i>" + "</button>" +
+                    "<button class='op-btn btn edit-product'>" + "<i class='material-icons'>" + "edit" + "</i>" + "</button>" +
+                    "<button class='op-btn btn delete-product'>" + "<i class='material-icons'>" + "delete" + "</i>" + "</button>" +
+                  "</div>" +
+                "</div>" +
               "</div>" +
-            "</div>" +
-          "</div>" +
-        "</div>");
+            "</div>");
+          }
+        }
       }
     }).fail(function(data) {
       alert('This is a graceful message. Beware of the 404!!!!!')
@@ -97,7 +111,13 @@ $(document).ready(function() {
       alert('This is a graceful message. Beware of the 404!!!!!')
     })
   });
-
+  function math() {
+    $('#quantity').on('keyup', function(){
+    var amount = +$(this).val();
+    var price = product.base_price
+    $('#total').text(amount * price)
+    })
+  };
 
   // SHOW PRODUCT
   $(document).on('click', '.show-product', function() {
@@ -105,23 +125,36 @@ $(document).ready(function() {
     $productList.hide();
     $showProduct.show();
     var productId = $(this).parent().parent().parent().attr('id');
+
     $.ajax({
       type: 'GET',
       url: BASEURL + '/products/' + productId,
       dataType: 'JSON'
     }).success(function(data) {
       var product = data
-      $showProduct.append("<div>" +
-        "<div id='" + product.id + "'class='col s12 m12'>" +
+
+      $showProduct.append("<div class='row'>" +
+        "<div id='" + product.id + "'class='col s8 m8'>" +
           "<div class='card'>" +
             "<div class='card-content'>" +
               "<span class='card-title'>" + product.name + "</span>" +
               "<p>" + "Description: " + product.description + "</p>" +
               "<p>" + "Price: " + "$" + product.base_price + "</p>" +
-              "<p>" + "Quantity: " + product.quantity_on_hand + "</p>" +
+              "<p>" + "On Stock: " + "$" + product.quantity_on_hand + "</p>" +
               "<p>" + "Color: " + product.color + "</p>" +
               "<p>" + "Weight: " + product.weight + "</p>" +
               "<p>" + "Other Attributes: " + product.other_attributes + "</p>" +
+            "</div>" +
+          "</div>" +
+        "</div>" +
+        "<div class='col s8 m4'>" +
+          "<div class='card'>" +
+            "<div class='card-content'>" +
+              "<span class='card-title'>" + product.name + "</span>" +
+              "<p>" + "Price: $" + product.base_price + "</p>" +
+              "<input id='quantity' type='number' value='1'></input>" +
+              "<p id='total'> Total: $" + math() + "</p>" +
+              "<div class='btn main-btn buy'>Buy</div>" +
             "</div>" +
           "</div>" +
         "</div>" +
@@ -156,7 +189,6 @@ $(document).ready(function() {
     }).success(function() {
       $productList.show();
       $productForm.hide();
-      $(this).data('product-id').focus();
       loadProducts();
     }).fail(function(data) {
       alert('This is a graceful message. Beware of the 404!!!!!')
