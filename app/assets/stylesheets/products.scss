@@ -1,0 +1,32 @@
+.op-btn {
+  background-color: #ccc;
+  width: 30px;
+  margin-left: 10px;
+  align-content: center;
+  color: #616161;
+  margin-top: 5px;
+}
+
+.op-btn .material-icons {
+  margin-left: -9px;
+}
+.op-btn:hover {
+  background-color: #616161;
+  color: #fff;
+}
+
+.main-btn {
+  background-color: #FF500C;
+  border-radius: 7px;
+}
+
+.main-btn:hover {
+  background-color: #616161;
+  color: #fff;
+}
+#show-product {
+  display: none;
+}
+#add-product-form {
+  display: none;
+}

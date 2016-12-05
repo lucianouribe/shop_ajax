@@ -1,0 +1,46 @@
+<div class="center">
+  <h1>Products</h1>
+  <hr/>
+</div>
+<div class="container">
+
+  <!-- CREATE action -->
+  <form id="add-product-form" method="post" action="api/v1/users">
+    <label>Product</label>
+    <input id="product-name" type="text" name='product[name]' required/>
+    <br/>
+    <label>Price</label>
+    <input id="product-base-price" type="text" name='product[base_price]'/>
+    <br/>
+    <label>Description</label>
+    <input id="product-description" type="text" name='product[description]'/>
+    <br/>
+    <label>Quantity</label>
+    <input id="product-quantity-on-hand" type="text" name='product[quanity_on_hand]'/>
+    <br/>
+    <label>Color</label>
+    <input id="product-color" type="text" name='product[color]'/>
+    <br/>
+    <label>Weight</label>
+    <input id="product-weight" type="text" name='product[weight]'/>
+    <br/>
+    <label>Other Attributes</label>
+    <input id="product-other-attributes" type="text" name='product[other_attributes]'/>
+    <br/>
+    <input type="submit" class="btn main-btn" />
+  </form>
+
+  <!-- SHOW action -->
+  <div id="show-product" class="col s8">
+    <div class="btn main-btn back">Product list</div>
+  </div>
+
+  <!-- INDEX action -->
+  <div class="product-list">
+    <div class="btn main-btn new-product">Add new product</div>
+    <div id="products" class="row">
+
+    </div>
+  </div>
+
+</div>
