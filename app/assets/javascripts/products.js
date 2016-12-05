@@ -153,10 +153,11 @@ $(document).ready(function() {
         description: $productDescription.val(), quantity_on_hand: $productQuantityOnHand.val(),
         color: $productColor.val(), weight: $productWeight.val(), other_attributes: $productOtherAttributes.val()
        } }
-    }).success(function(data) {
+    }).success(function() {
       $productList.show();
       $productForm.hide();
-      // loadProducts();
+      $(this).data('product-id').focus();
+      loadProducts();
     }).fail(function(data) {
       alert('This is a graceful message. Beware of the 404!!!!!')
     });
